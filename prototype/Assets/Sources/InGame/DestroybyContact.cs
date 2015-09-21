@@ -42,12 +42,18 @@ public class DestroybyContact : MonoBehaviour {
 					{
 						if (hit.collider.tag == "Enemy")
 						{		
-							Debug.Log("hit info : " + hit.collider);	
-
 							Instantiate (explosion, hit.collider.gameObject.transform.position, hit.collider.gameObject.transform.rotation);
 
 							gameController.GetComponent<GameController>().AddScore (10);
 
+							Destroy (hit.collider.gameObject);
+						}
+						else if (hit.collider.tag == "do_not_touch")
+						{
+							Instantiate (explosion, hit.collider.gameObject.transform.position, hit.collider.gameObject.transform.rotation);
+							
+							gameController.GetComponent<GameController>().AddScore (-10);
+							
 							Destroy (hit.collider.gameObject);
 						}
 					}

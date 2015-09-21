@@ -9,12 +9,11 @@ public class GameController : MonoBehaviour
 	public float startWait = 1;
 	public float spawnWait = 0.75f;
 	public float waveWait = 2;
-	
 
 	public GUIText scoreText;
-	public GUIText restartText;
 	public GUIText gameoverText;
 
+	GameObject ui;
 	int score;
 	bool gameover;
 
@@ -23,14 +22,14 @@ public class GameController : MonoBehaviour
 		Screen.SetResolution (480, 800, true);
 
 		scoreText.text = "";
-		restartText.text = "";
 		gameoverText.text = "";
 
 		score = 0;
 		gameover = false;
 		//googleAnalytics.LogEvent("Barren Fields", "Rescue", "Dragon", 1);
 
-		GameObject go = GameObject.Find("restart_btn"); 
+		ui = GameObject.Find("restart_btn"); 
+		ui.SetActive (false);
 
 		GameStart ();
 	}
@@ -78,10 +77,7 @@ public class GameController : MonoBehaviour
 
 			if (gameover == true)
 			{
-				restartText.text = "Press 'R' for Lobby";
-
-				GameObject go = GameObject.Find("restart_btn"); 
-
+				ui.SetActive(true);
 
 				break;
 			}
