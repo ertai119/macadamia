@@ -3,8 +3,6 @@ using System.Collections;
 
 public class GameController : MonoBehaviour
 {
-	public GoogleAnalyticsV3 googleAnalytics;
-
 	public GameObject[] hazards;
 	public float startWait = 1;
 	public float spawnWait = 0.75f;

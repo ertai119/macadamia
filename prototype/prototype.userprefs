@@ -1,11 +1,11 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Sources\InGame\GameController.cs">
     <Files>
-      <File FileName="Assets\Sources\InGame\GameController.cs" Line="27" Column="26" />
-      <File FileName="Assets\Sources\Common\KeyEvent.cs" Line="31" Column="12" />
-      <File FileName="Assets\Sources\Lobby\Main.cs" Line="1" Column="1" />
-      <File FileName="Assets\Sources\InGame\DestroybyContact.cs" Line="80" Column="5" />
+      <File FileName="Assets\Sources\InGame\GameController.cs" Line="26" Column="20" />
+      <File FileName="Assets\Sources\Common\KeyEvent.cs" Line="36" Column="1" />
+      <File FileName="Assets\Sources\Lobby\Main.cs" Line="16" Column="1" />
+      <File FileName="Assets\Sources\InGame\DestroybyContact.cs" Line="89" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
