@@ -5,6 +5,7 @@ public class DestroybyContact : MonoBehaviour {
 
 	public GameObject explosion;	
 	public GameObject playerExplosion;
+	public int hitCount;
 	private Vector2 touchpos;
 
 	GameObject gameController;
@@ -46,15 +47,25 @@ public class DestroybyContact : MonoBehaviour {
 
 							gameController.GetComponent<GameController>().AddScore (10);
 
-							Destroy (hit.collider.gameObject);
+							hitCount--;
+
+							if (hitCount <= 0)
+							{
+								Destroy (hit.collider.gameObject);
+							}
 						}
 						else if (hit.collider.tag == "do_not_touch")
 						{
 							Instantiate (explosion, hit.collider.gameObject.transform.position, hit.collider.gameObject.transform.rotation);
 							
-							gameController.GetComponent<GameController>().AddScore (-10);
-							
-							Destroy (hit.collider.gameObject);
+							gameController.GetComponent<GameController>().AddScore (10);
+
+							hitCount--; 
+
+							if (hitCount <= 0)
+							{
+								Destroy (hit.collider.gameObject);
+							}
 						}
 					}
 				}
@@ -80,7 +91,7 @@ public class DestroybyContact : MonoBehaviour {
 			gameController.GetComponent<GameController>().GameOver();
 		}
 
-		//gameController.GetComponent<GameController>().AddScore (10);
+		gameController.GetComponent<GameController>().AddScore (-10);
 
 		Destroy (gameObject);
 		//Destroy (other.gameObject);
