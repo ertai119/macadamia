@@ -18,14 +18,41 @@ public class PlayerContoller : MonoBehaviour
 	{
 		Vector3 scrSpace = Camera.main.WorldToScreenPoint (transform.position);
 		Vector3 offset = transform.position - Camera.main.ScreenToWorldPoint (new Vector3 (Input.mousePosition.x, Input.mousePosition.y, scrSpace.z));
-		
+
+		Debug.Log ("hit IEnumerator");
+
 		while (Input.GetMouseButton(0))
 		{
 			Vector3 curScreenSpace = new Vector3 (Input.mousePosition.x, Input.mousePosition.y, scrSpace.z);
-				Vector3 curPosition = Camera.main.ScreenToWorldPoint(curScreenSpace) + offset;
+			Vector3 curPosition = Camera.main.ScreenToWorldPoint(curScreenSpace) + offset;
 			transform.position = curPosition;
+
 			yield return null;
 		}
+	}
+
+	void HitMouseDown()
+	{
+		Vector3 scrSpace = Camera.main.WorldToScreenPoint (transform.position);
+		Vector3 offset = transform.position - Camera.main.ScreenToWorldPoint (new Vector3 (Input.mousePosition.x, Input.mousePosition.y, scrSpace.z));
+		
+		Debug.Log ("hit");
+		
+		//while (Input.GetMouseButton(0))
+		{
+			Vector3 curScreenSpace = new Vector3 (Input.mousePosition.x, Input.mousePosition.y, scrSpace.z);
+			Vector3 curPosition = Camera.main.ScreenToWorldPoint(curScreenSpace) + offset;
+			transform.position = curPosition;
+			
+			//yield return null;
+
+			Debug.Log ("hit : " + GetComponent<Rigidbody> ().position.x);
+		}
+	}
+
+	public void ShotMissle()
+	{		
+		Instantiate(shot, firePosition.position, firePosition.rotation);
 	}
 
 	void Update()
@@ -33,11 +60,14 @@ public class PlayerContoller : MonoBehaviour
 		if (Input.touchCount > 0 || Input.GetKey(KeyCode.Mouse0))
 		{
 			//Instantiate(shot, firePosition.position, firePosition.rotation);
+			HitMouseDown();
 		}
 	}
 	// Update is called once per frame
 	void FixedUpdate ()
 	{
+		//HitMouseDown();
+		/*
 		float dirX = Input.GetAxis("Horizontal");
 		float dirY = Input.GetAxis("Vertical");
 
@@ -45,5 +75,6 @@ public class PlayerContoller : MonoBehaviour
 
 		GetComponent<Rigidbody> ().velocity = movement * speed;
 		GetComponent<Rigidbody> ().rotation = Quaternion.Euler (0, 0, GetComponent<Rigidbody> ().velocity.x * -tilt);
+		*/
 	}
 }
