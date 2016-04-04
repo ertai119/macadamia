@@ -46,15 +46,13 @@ public class PlayerContoller : MonoBehaviour
 		localTm.Rotate (dir);
 
 		Vector3 clickedPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-		Vector3 convertedPos;
-		convertedPos.x = clickedPos.y;
-		convertedPos.y = 0;
-		convertedPos.z = clickedPos.x;
+		clickedPos.y = 0;
 
+		GetComponent<Rigidbody> ().transform.LookAt(clickedPos);
 
-		GetComponent<Rigidbody> ().transform.LookAt(convertedPos);
+		Debug.Log ("click pos : " + clickedPos + " scr pos : " + scrSpace + " world pos : " + GetComponent<Rigidbody>().position);
 
-		Debug.Log ("local pos : " + scrSpace + " offset : " + offset + " mouse pos : " + Input.mousePosition);
+		Instantiate(shot, firePosition.position, firePosition.rotation);
 
 		return null;
 	}
