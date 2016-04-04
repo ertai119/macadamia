@@ -7,8 +7,6 @@ Project("{C18462A3-5A7A-F69A-3EEA-94F84B7D6A46}") = "prototype", "Assembly-CShar
 EndProject
 Project("{C18462A3-5A7A-F69A-3EEA-94F84B7D6A46}") = "prototype", "Assembly-CSharp-Editor-firstpass.csproj", "{A9714452-0830-2800-8112-A2839C9F24B2}"
 EndProject
-Project("{C18462A3-5A7A-F69A-3EEA-94F84B7D6A46}") = "prototype", "Assembly-UnityScript-Editor-firstpass.unityproj", "{97AC9833-9D04-057D-E32E-E66A50B1B797}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,10 +25,6 @@ Global
 		{A9714452-0830-2800-8112-A2839C9F24B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A9714452-0830-2800-8112-A2839C9F24B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A9714452-0830-2800-8112-A2839C9F24B2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{97AC9833-9D04-057D-E32E-E66A50B1B797}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{97AC9833-9D04-057D-E32E-E66A50B1B797}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{97AC9833-9D04-057D-E32E-E66A50B1B797}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{97AC9833-9D04-057D-E32E-E66A50B1B797}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -54,5 +48,4 @@ Global
 		$3.inheritsScope = text/plain
 		$3.scope = text/plain
 	EndGlobalSection
-
 EndGlobal

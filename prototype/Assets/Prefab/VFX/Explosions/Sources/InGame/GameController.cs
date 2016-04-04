@@ -52,7 +52,6 @@ public class GameController : MonoBehaviour
 	{
 		gameoverText.text = "Game Over!!!";
 		gameover = true;
-
 	}
 
 	IEnumerator SpawnWaves()
@@ -85,4 +84,5 @@ public class GameController : MonoBehaviour
 	void Update ()
 	{
 	}
+	
 }
