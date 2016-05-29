@@ -4,6 +4,8 @@ using System.Collections;
 public class Projectile : MonoBehaviour {
 
     public LayerMask collisionMask;
+    public Color trailColor;
+
     float speed = 10;
     float damege = 1;
     float lifeTime = 3;
@@ -15,8 +17,10 @@ public class Projectile : MonoBehaviour {
 
         Collider[] initialCollisions = Physics.OverlapSphere (transform.position, .1f, collisionMask);
         if (initialCollisions.Length > 0) {
-            OnHitObject (initialCollisions [0]);
+            OnHitObject (initialCollisions [0], transform.position);
         }
+
+        GetComponent<TrailRenderer>().material.SetColor("_TintColor", trailColor);
     }
 	public void SetSpeed(float newSpeed)
 	{
@@ -36,24 +40,15 @@ public class Projectile : MonoBehaviour {
         RaycastHit hit;
 
         if (Physics.Raycast (ray, out hit, moveDistance + adjustRayOffset, collisionMask, QueryTriggerInteraction.Collide)) {
-            OnHitObject (hit);
+            OnHitObject (hit.collider, hit.point);
         }
     }
 
-    void OnHitObject(RaycastHit hit)
-    {
-        IDamageable damageableObject = hit.collider.GetComponent<IDamageable> ();
-        if (damageableObject != null) {
-            damageableObject.TakeHit (damege, hit);
-        }
-        GameObject.Destroy (gameObject);
-    }
-
-    void OnHitObject(Collider c)
+    void OnHitObject(Collider c, Vector3 hitPoint)
     {
         IDamageable damageableObject = c.GetComponent<IDamageable> ();
         if (damageableObject != null) {
-            damageableObject.TakeDamage (damege);
+            damageableObject.TakeHit (damege, hitPoint, transform.forward);
         }
         GameObject.Destroy (gameObject);
     }

@@ -45,6 +45,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Script\Crosshairs.cs" />
      <Compile Include="Assets\Script\Enemy.cs" />
      <Compile Include="Assets\Script\GameUI.cs" />
      <Compile Include="Assets\Script\Gun.cs" />
@@ -52,9 +53,11 @@
      <Compile Include="Assets\Script\IDamageable.cs" />
      <Compile Include="Assets\Script\LivingEntity.cs" />
      <Compile Include="Assets\Script\MapGenerator.cs" />
+     <Compile Include="Assets\Script\MuzzleFlash.cs" />
      <Compile Include="Assets\Script\Player.cs" />
      <Compile Include="Assets\Script\PlayerController.cs" />
      <Compile Include="Assets\Script\Projectile.cs" />
+     <Compile Include="Assets\Script\Shell.cs" />
      <Compile Include="Assets\Script\Spawner.cs" />
      <Compile Include="Assets\Script\Utility.cs" />
  <Reference Include="UnityEngine.UI">

@@ -7,6 +7,7 @@ using System.Collections;
 public class Player : LivingEntity {
 
 	public float moveSpeed = 5;
+    public Crosshairs crosshairs;
 
 	Camera viewCamera;
 	PlayerController playerController;
@@ -16,13 +17,23 @@ public class Player : LivingEntity {
     protected override void Start () 
 	{
         base.Start ();
-
-		playerController = GetComponent<PlayerController> ();
-		gunController = GetComponent<GunController> ();
-
-		viewCamera = Camera.main;
 	}
 	
+    void Awake()
+    {
+        playerController = GetComponent<PlayerController> ();
+        gunController = GetComponent<GunController> ();
+
+        viewCamera = Camera.main;
+        FindObjectOfType<Spawner>().OnNewWave += OnNextWave;
+    }
+
+    void OnNextWave(int waveNumber)
+    {
+        health = startingHealth;
+        gunController.EquipGun();
+    }
+
 	// Update is called once per frame
 	void Update () 
 	{
@@ -33,7 +44,7 @@ public class Player : LivingEntity {
 
 		// Lookat Input
 		Ray ray = viewCamera.ScreenPointToRay (Input.mousePosition);
-		Plane groundPlane = new Plane (Vector3.up, Vector3.zero);
+        Plane groundPlane = new Plane (Vector3.up, Vector3.up * gunController.GunHeight);
 
 		float rayDistance;
 		if (groundPlane.Raycast(ray, out rayDistance))
@@ -41,12 +52,29 @@ public class Player : LivingEntity {
 			Vector3 point = ray.GetPoint(rayDistance);
 			//Debug.DrawLine(ray.origin, point, Color.red);
 			playerController.LookAt(point);
+            crosshairs.transform.position = point;
+            crosshairs.DetectTargets(ray);
+
+            if ((new Vector2(point.x, point.z) - new Vector2(transform.position.x, transform.position.z)).sqrMagnitude > 1)
+            {
+                gunController.Aim(point);    
+            }
 		}
 
 		// Weapon Input
 		if (Input.GetMouseButton(0))
 		{
-			gunController.Shoot ();	
+            gunController.OnTriggerHold ();
 		}
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            gunController.OnTriggerRelease ();
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            gunController.Reload();
+        }
 	}
 }

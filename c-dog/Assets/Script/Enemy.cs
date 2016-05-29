@@ -3,8 +3,8 @@ using System.Collections;
 
 [RequireComponent (typeof(NavMeshAgent))]
 
-public class Enemy : LivingEntity {
-
+public class Enemy : LivingEntity
+{
     public enum State
     {
         Idle,
@@ -18,6 +18,7 @@ public class Enemy : LivingEntity {
     Material skinMaterial;
     Color originalColor;
     LivingEntity targetEntity;
+    public ParticleSystem deathEffect;
 
     float attackDistanceThreshold = .5f;
     float timeBetweenAttacks = 1;
@@ -28,25 +29,31 @@ public class Enemy : LivingEntity {
     float damage = 1;
     bool hasTarget;
 
-	// Use this for initialization
-    protected override void Start () {
-        base.Start ();
-
+    public void Awake()
+    {
         pathFinder = GetComponent<NavMeshAgent> ();
-        skinMaterial = GetComponent<Renderer> ().material;
-        originalColor = skinMaterial.color;
 
         if (GameObject.FindGameObjectWithTag ("Player") != null)
         {
-            currentState = State.Chasing;
             hasTarget = true;
 
             target = GameObject.FindGameObjectWithTag ("Player").transform;
             targetEntity = target.GetComponent<LivingEntity> ();
-            targetEntity.OnDeath += OnTargetDeath;
-
+          
             myCollisionRadius = GetComponent<CapsuleCollider> ().radius;
             targetCollisionRadius = target.GetComponent<CapsuleCollider> ().radius;
+        }
+    }
+
+    protected override void Start () {
+        base.Start ();
+
+        pathFinder = GetComponent<NavMeshAgent> ();
+
+        if (hasTarget)
+        {
+            currentState = State.Chasing;
+            targetEntity.OnDeath += OnTargetDeath;
 
             StartCoroutine (UpdatePath ());
         }
@@ -57,7 +64,32 @@ public class Enemy : LivingEntity {
         hasTarget = false;
         currentState = State.Idle;
     }
-	
+
+    public void SetCharacteristics(float moveSpeed, float hitsToKillPlayer, float enemyHealth, Color skinColor)
+    {
+        pathFinder.speed = moveSpeed;
+
+        if (hasTarget)
+        {
+            damage = Mathf.Ceil(targetEntity.startingHealth / hitsToKillPlayer);
+        }
+
+        startingHealth = enemyHealth;
+
+        skinMaterial = GetComponent<Renderer> ().sharedMaterial;
+        skinMaterial.color = skinColor;
+        originalColor = skinMaterial.color;
+    }
+
+    public override void TakeHit(float damage, Vector3 hitPoint, Vector3 hitDir)
+    {
+        if (damage >= health)
+        {
+            Destroy(Instantiate(deathEffect.gameObject, hitPoint, Quaternion.FromToRotation(Vector3.forward, hitDir)) as GameObject, deathEffect.startLifetime);
+        }
+        base.TakeHit(damage, hitPoint, hitDir);
+    }
+
 	// Update is called once per frame
 	void Update () 
     {
