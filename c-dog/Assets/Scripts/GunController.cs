@@ -41,8 +41,10 @@ public class GunController : MonoBehaviour {
 	}
 
 	public void Aim(Vector3 aimPoint) {
-		if (equippedGun != null) {
-			equippedGun.Aim(aimPoint);
+		if (equippedGun != null)
+        {
+            Vector3 heightCorrectedPoint = new Vector3 (aimPoint.x, transform.position.y, aimPoint.z);
+            equippedGun.Aim(heightCorrectedPoint);
 		}
 	}
 

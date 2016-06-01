@@ -48,7 +48,7 @@ public class Gun : MonoBehaviour {
 		// animate recoil
 		transform.localPosition = Vector3.SmoothDamp (transform.localPosition, Vector3.zero, ref recoilSmoothDampVelocity, recoilMoveSettleTime);
 		recoilAngle = Mathf.SmoothDamp (recoilAngle, 0, ref recoilRotSmoothDampVelocity, recoilRotationSettleTime);
-		transform.localEulerAngles = transform.localEulerAngles + Vector3.left * recoilAngle;
+		//transform.localEulerAngles = transform.localEulerAngles + Vector3.left * recoilAngle;
 
 		if (!isReloading && projectilesRemainingInMag == 0) {
 			Reload();

@@ -191,6 +191,27 @@ public class MapGenerator : MonoBehaviour {
 			y = _y;
 		}
 		
+        public override int GetHashCode()        
+        {            
+            return x ^ y;        
+        }       
+
+        public override bool Equals(object obj)        
+        {           
+            if (!(obj is Coord))                
+                return false;             
+
+            return Equals((Coord)obj);        
+        }         
+
+        public bool Equals(Coord other)        
+        {            
+            if (y != other.x)                
+                return false;             
+
+            return y == other.y;        
+        } 
+
 		public static bool operator ==(Coord c1, Coord c2) {
 			return c1.x == c2.x && c1.y == c2.y;
 		}
