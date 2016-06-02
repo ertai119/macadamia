@@ -36,3 +36,4 @@
 /Users/leeonehyo/Documents/macadamia/c-dog/Temp/bin/Debug/Unity.CecilTools.dll
 /Users/leeonehyo/Documents/macadamia/c-dog/Temp/bin/Debug/Mono.Cecil.Pdb.dll
 /Users/leeonehyo/Documents/macadamia/c-dog/Temp/bin/Debug/Mono.Cecil.Mdb.dll
+/Users/leeonehyo/Documents/macadamia/c-dog/Temp/bin/Debug/UnityEngine.Analytics.dll

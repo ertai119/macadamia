@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+
 using CnControls;
+using UnityEngine.Analytics;
 
 [RequireComponent (typeof (PlayerController))]
 [RequireComponent (typeof (GunController))]
@@ -10,24 +13,41 @@ public class Player : LivingEntity {
 
 	public Crosshairs crosshairs;
 
-	Camera viewCamera;
+    bool buttonDown = false;
 	PlayerController controller;
 	GunController gunController;
 	
-	protected override void Start () {
+	protected override void Start ()
+    {
 		base.Start ();
+
+        /*Analytics.Transaction("12345abcde", 0.99m, "USD", null, null);
+
+        Gender gender = Gender.Female;
+        Analytics.SetUserGender(gender);
+
+        int birthYear = 2014;
+        Analytics.SetUserBirthYear(birthYear);*/
 	}
 
-	void Awake() {
+	void Awake()
+    {
 		controller = GetComponent<PlayerController> ();
 		gunController = GetComponent<GunController> ();
-		viewCamera = Camera.main;
+		//viewCamera = Camera.main;
 		FindObjectOfType<Spawner> ().OnNewWave += OnNewWave;
 	}
 
-	void OnNewWave(int waveNumber) {
+	void OnNewWave(int waveNumber)
+    {
 		health = startingHealth;
 		gunController.EquipGun (waveNumber - 1);
+
+        Analytics.CustomEvent("on new wave", new Dictionary<string, object>
+            {
+                { "health", health },
+                { "wave number", waveNumber }
+            });        
 	}
 
 	void Update () {
@@ -41,37 +61,34 @@ public class Player : LivingEntity {
         Vector3 camDir = cameraInput.normalized;
         if (camDir != Vector3.zero)
         {
-            //Vector3 heightCorrectedPoint = new Vector3 (camDir.x, 0, camDir.z);
+            buttonDown = true;
+
             Vector3 lookPoint = cameraInput.normalized + controller.transform.position;
             controller.LookAt(lookPoint);
             //gunController.Aim(lookPoint);
+
+            crosshairs.transform.position = lookPoint;
+        }
+        else
+        {
+            buttonDown = false;
         }
 
-
-        /*
-		Ray ray = viewCamera.ScreenPointToRay (Input.mousePosition);
-		Plane groundPlane = new Plane (Vector3.up, Vector3.up * gunController.GunHeight);
-		float rayDistance;
-
-		if (groundPlane.Raycast(ray,out rayDistance)) {
-			Vector3 point = ray.GetPoint(rayDistance);
-			Debug.DrawLine(ray.origin,point,Color.red);
-			controller.LookAt(point);
-			crosshairs.transform.position = point;
-			crosshairs.DetectTargets(ray);
-			if ((new Vector2(point.x, point.z) - new Vector2(transform.position.x, transform.position.z)).sqrMagnitude > 1) {
-                //gunController.Aim(point);
-			}
-		}*/
+        print(buttonDown);
 
 		// Weapon input
-		if (Input.GetMouseButton(0)) {
+        if (buttonDown == true)
+        {
 			gunController.OnTriggerHold();
 		}
-		if (Input.GetMouseButtonUp(0)) {
+
+        if (buttonDown == false)
+        {
 			gunController.OnTriggerRelease();
 		}
-		if (Input.GetKeyDown (KeyCode.R)) {
+
+		if (Input.GetKeyDown (KeyCode.R))
+        {
 			gunController.Reload();
 		}
 
