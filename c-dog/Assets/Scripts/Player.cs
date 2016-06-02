@@ -17,6 +17,9 @@ public class Player : LivingEntity {
 	PlayerController controller;
 	GunController gunController;
 	
+    public GameObject moveJoystick;
+    public GameObject cameraJoystick;
+
 	protected override void Start ()
     {
 		base.Start ();
@@ -36,7 +39,15 @@ public class Player : LivingEntity {
 		gunController = GetComponent<GunController> ();
 		//viewCamera = Camera.main;
 		FindObjectOfType<Spawner> ().OnNewWave += OnNewWave;
-	}
+
+        if (Menu.instance.easyModeFlag)
+        {
+            if (cameraJoystick != null)
+            {
+                cameraJoystick.SetActive(false);
+            }
+        }
+    }
 
 	void OnNewWave(int waveNumber)
     {
@@ -56,25 +67,44 @@ public class Player : LivingEntity {
         Vector3 moveVelocity = moveInput.normalized * moveSpeed;
 		controller.Move (moveVelocity);
 
-		// Look input
-        Vector3 cameraInput = new Vector3 (CnInputManager.GetAxis ("CameraHorizontal"), 0f, CnInputManager.GetAxis("CameraVertical"));
-        Vector3 camDir = cameraInput.normalized;
-        if (camDir != Vector3.zero)
+        if (Menu.instance.easyModeFlag == false)
         {
-            buttonDown = true;
+            // Look input
+            Vector3 cameraInput = new Vector3(CnInputManager.GetAxis("CameraHorizontal"), 0f, CnInputManager.GetAxis("CameraVertical"));
+            Vector3 camDir = cameraInput.normalized;
+            if (camDir != Vector3.zero)
+            {
+                buttonDown = true;
 
-            Vector3 lookPoint = cameraInput.normalized + controller.transform.position;
-            controller.LookAt(lookPoint);
-            //gunController.Aim(lookPoint);
+                Vector3 lookPoint = cameraInput.normalized + controller.transform.position;
+                controller.LookAt(lookPoint);
+                //gunController.Aim(lookPoint);
 
-            crosshairs.transform.position = lookPoint;
+                crosshairs.transform.position = lookPoint;
+            }
+            else
+            {
+                buttonDown = false;
+            }    
         }
         else
         {
-            buttonDown = false;
-        }
+            if (moveInput.normalized != Vector3.zero)
+            {
+                buttonDown = true;
 
-        print(buttonDown);
+                Vector3 lookPoint = moveInput.normalized + controller.transform.position;
+                controller.LookAt(lookPoint);
+                //gunController.Aim(lookPoint);
+
+                crosshairs.transform.position = lookPoint;
+            }
+            else
+            {
+                buttonDown = false;
+            }
+        }
+       
 
 		// Weapon input
         if (buttonDown == true)

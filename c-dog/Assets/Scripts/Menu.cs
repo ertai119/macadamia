@@ -9,42 +9,91 @@ public class Menu : MonoBehaviour {
 	public GameObject optionsMenuHolder;
 
 	public Slider[] volumeSliders;
+    public Toggle easyMode;
 
-	void Start() {
+    public static Menu instance;
 
-		volumeSliders [0].value = AudioManager.instance.masterVolumePercent;
-		volumeSliders [1].value = AudioManager.instance.musicVolumePercent;
-		volumeSliders [2].value = AudioManager.instance.sfxVolumePercent;
+    public bool easyModeFlag { get; private set; }
+
+    void Awake()
+    {
+        if (instance != null)
+        {
+            Destroy (gameObject);
+        } 
+        else 
+        {
+            instance = this;
+            DontDestroyOnLoad (gameObject);
+
+            easyModeFlag = PlayerPrefs.GetInt("easy mode", 1) > 0;
+        }
+    }
+
+	void Start()
+    {
+        if (volumeSliders[0] != null)
+        {
+            volumeSliders[0].value = AudioManager.instance.masterVolumePercent;
+        }
+
+        if (volumeSliders[1] != null)
+        {
+            volumeSliders[1].value = AudioManager.instance.musicVolumePercent;
+        }
+
+        if (volumeSliders[2] != null)
+        {
+            volumeSliders[2].value = AudioManager.instance.sfxVolumePercent;
+        }
+		
+        if (easyMode != null)
+        {
+            easyMode.isOn = easyModeFlag;
+        }
 	}
 
-
-	public void Play() {
+	public void Play()
+    {
 		SceneManager.LoadScene ("Game");
 	}
 
-	public void Quit() {
+	public void Quit()
+    {
 		Application.Quit ();
 	}
 
-	public void OptionsMenu() {
+	public void OptionsMenu()
+    {
 		mainMenuHolder.SetActive (false);
 		optionsMenuHolder.SetActive (true);
 	}
 
-	public void MainMenu() {
+	public void MainMenu()
+    {
 		mainMenuHolder.SetActive (true);
 		optionsMenuHolder.SetActive (false);
 	}
 	
-	public void SetMasterVolume(float value) {
+    public void SetEasyMode()
+    {
+        easyModeFlag = easyMode.isOn;
+        PlayerPrefs.SetInt("easy mode", easyModeFlag ? 1 : 0);
+        PlayerPrefs.Save();
+    }
+
+	public void SetMasterVolume(float value)
+    {
 		AudioManager.instance.SetVolume (value, AudioManager.AudioChannel.Master);
 	}
 
-	public void SetMusicVolume(float value) {
+	public void SetMusicVolume(float value)
+    {
 		AudioManager.instance.SetVolume (value, AudioManager.AudioChannel.Music);
 	}
 
-	public void SetSfxVolume(float value) {
+	public void SetSfxVolume(float value)
+    {
 		AudioManager.instance.SetVolume (value, AudioManager.AudioChannel.Sfx);
 	}
 
