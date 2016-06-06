@@ -24,20 +24,20 @@ public class Player : LivingEntity {
     {
 		base.Start ();
 
-        /*Analytics.Transaction("12345abcde", 0.99m, "USD", null, null);
+        Analytics.Transaction("12345abcde", 0.99m, "USD", null, null);
 
         Gender gender = Gender.Female;
         Analytics.SetUserGender(gender);
 
         int birthYear = 2014;
-        Analytics.SetUserBirthYear(birthYear);*/
+        Analytics.SetUserBirthYear(birthYear);
 	}
 
 	void Awake()
     {
 		controller = GetComponent<PlayerController> ();
 		gunController = GetComponent<GunController> ();
-		//viewCamera = Camera.main;
+		
 		FindObjectOfType<Spawner> ().OnNewWave += OnNewWave;
 
         if (Menu.instance.easyModeFlag)

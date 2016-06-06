@@ -21,13 +21,11 @@ public class Menu : MonoBehaviour {
         {
             Destroy (gameObject);
         } 
-        else 
-        {
-            instance = this;
-            DontDestroyOnLoad (gameObject);
 
-            easyModeFlag = PlayerPrefs.GetInt("easy mode", 1) > 0;
-        }
+        instance = this;
+        //DontDestroyOnLoad (gameObject);
+
+        easyModeFlag = PlayerPrefs.GetInt("easy mode", 1) > 0;
     }
 
 	void Start()

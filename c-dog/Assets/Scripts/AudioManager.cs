@@ -26,35 +26,33 @@ public class AudioManager : MonoBehaviour {
         {
 			Destroy (gameObject);
 		} 
-        else 
+
+        instance = this;
+        //DontDestroyOnLoad (gameObject);
+
+        library = GetComponent<SoundLibrary> ();
+
+        musicSources = new AudioSource[2];
+        for (int i = 0; i < 2; i++)
         {
-			instance = this;
-			DontDestroyOnLoad (gameObject);
+            GameObject newMusicSource = new GameObject ("Music source " + (i + 1));
+            musicSources [i] = newMusicSource.AddComponent<AudioSource> ();
+            newMusicSource.transform.parent = transform;
+        }
 
-			library = GetComponent<SoundLibrary> ();
+        GameObject newSfx2Dsource = new GameObject ("2D sfx source");
+        sfx2DSource = newSfx2Dsource.AddComponent<AudioSource> ();
+        newSfx2Dsource.transform.parent = transform;
 
-			musicSources = new AudioSource[2];
-			for (int i = 0; i < 2; i++)
-            {
-				GameObject newMusicSource = new GameObject ("Music source " + (i + 1));
-				musicSources [i] = newMusicSource.AddComponent<AudioSource> ();
-				newMusicSource.transform.parent = transform;
-			}
+        audioListener = FindObjectOfType<AudioListener> ().transform;
+        if (FindObjectOfType<Player> () != null)
+        {
+            playerT = FindObjectOfType<Player> ().transform;
+        }
 
-			GameObject newSfx2Dsource = new GameObject ("2D sfx source");
-			sfx2DSource = newSfx2Dsource.AddComponent<AudioSource> ();
-			newSfx2Dsource.transform.parent = transform;
-
-			audioListener = FindObjectOfType<AudioListener> ().transform;
-			if (FindObjectOfType<Player> () != null)
-            {
-				playerT = FindObjectOfType<Player> ().transform;
-			}
-
-			masterVolumePercent = PlayerPrefs.GetFloat ("master vol", 1);
-			sfxVolumePercent = PlayerPrefs.GetFloat ("sfx vol", 1);
-			musicVolumePercent = PlayerPrefs.GetFloat ("music vol", 1);
-		}
+        masterVolumePercent = PlayerPrefs.GetFloat ("master vol", 1);
+        sfxVolumePercent = PlayerPrefs.GetFloat ("sfx vol", 1);
+        musicVolumePercent = PlayerPrefs.GetFloat ("music vol", 1);
 	}
 
 	void OnLevelWasLoaded(int index)
@@ -126,7 +124,6 @@ public class AudioManager : MonoBehaviour {
     {
 		sfx2DSource.PlayOneShot (library.GetClipFromName (soundName), sfxVolumePercent * masterVolumePercent);
 	}
-
 
 	IEnumerator AnimateMusicCrossfade(float duration)
     {
