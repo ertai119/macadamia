@@ -80,7 +80,7 @@ public class Player : LivingEntity {
                 controller.LookAt(lookPoint);
                 //gunController.Aim(lookPoint);
 
-                crosshairs.transform.position = lookPoint;
+                //crosshairs.transform.position = lookPoint;
             }
             else
             {
@@ -97,7 +97,7 @@ public class Player : LivingEntity {
                 controller.LookAt(lookPoint);
                 //gunController.Aim(lookPoint);
 
-                crosshairs.transform.position = lookPoint;
+                //crosshairs.transform.position = lookPoint;
             }
             else
             {
