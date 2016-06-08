@@ -19,6 +19,7 @@ public class Player : LivingEntity {
 	
     public GameObject moveJoystick;
     public GameObject cameraJoystick;
+    public GameObject shootButton;
 
 	protected override void Start ()
     {
@@ -42,10 +43,13 @@ public class Player : LivingEntity {
 
         if (Menu.instance.easyModeFlag)
         {
-            if (cameraJoystick != null)
-            {
-                cameraJoystick.SetActive(false);
-            }
+            cameraJoystick.SetActive(false);
+            shootButton.SetActive(true);
+        }
+        else
+        {
+            cameraJoystick.SetActive(true);
+            shootButton.SetActive(false);
         }
     }
 
@@ -89,22 +93,16 @@ public class Player : LivingEntity {
         }
         else
         {
+            buttonDown = CnInputManager.GetButton("Shoot");
             if (moveInput.normalized != Vector3.zero)
             {
-                buttonDown = true;
-
                 Vector3 lookPoint = moveInput.normalized + controller.transform.position;
                 controller.LookAt(lookPoint);
                 //gunController.Aim(lookPoint);
 
                 //crosshairs.transform.position = lookPoint;
             }
-            else
-            {
-                buttonDown = false;
-            }
-        }
-       
+        }       
 
 		// Weapon input
         if (buttonDown == true)
