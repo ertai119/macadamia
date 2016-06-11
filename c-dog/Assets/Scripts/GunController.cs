@@ -7,20 +7,30 @@ public class GunController : MonoBehaviour {
 	public Gun[] allGuns;
 	Gun equippedGun;
 
-	void Start() {
+	void Start()
+    {
 	}
 
-	public void EquipGun(Gun gunToEquip) {
-		if (equippedGun != null) {
+	public void EquipGun(Gun gunToEquip)
+    {
+		if (equippedGun != null)
+        {
 			Destroy(equippedGun.gameObject);
 		}
+
 		equippedGun = Instantiate (gunToEquip, weaponHold.position,weaponHold.rotation) as Gun;
 		equippedGun.transform.parent = weaponHold;
 	}
 
-	public void EquipGun(int weaponIndex) {
+	public void EquipGun(int weaponIndex)
+    {
 		EquipGun (allGuns [weaponIndex]);
 	}
+
+    public Gun GetEquippedGun()
+    {
+        return equippedGun;
+    }
 
 	public void OnTriggerHold() {
 		if (equippedGun != null) {

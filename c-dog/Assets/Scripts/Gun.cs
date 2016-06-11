@@ -7,7 +7,7 @@ public class Gun : MonoBehaviour {
 	public FireMode fireMode;
 
 	public Transform[] projectileSpawn;
-	public Projectile projectile;
+    public PoolObject projectile;
 	public float msBetweenShots = 100;
 	public float muzzleVelocity = 35;
 	public int burstCount;
@@ -21,7 +21,7 @@ public class Gun : MonoBehaviour {
 	public float recoilRotationSettleTime = .1f;
 
 	[Header("Effects")]
-	public Transform shell;
+    public PoolObject shell;
 	public Transform shellEjection;
 	public AudioClip shootAudio;
 	public AudioClip reloadAudio;
@@ -38,49 +38,69 @@ public class Gun : MonoBehaviour {
 	float recoilRotSmoothDampVelocity;
 	float recoilAngle;
 
-	void Start() {
+    void Awake()
+    {
+        PoolManager.instance.CreatePool(projectile.gameObject, 30);
+        PoolManager.instance.CreatePool(shell.gameObject, 10);
+    }
+
+	void Start()
+    {
 		muzzleflash = GetComponent<MuzzleFlash> ();
 		shotsRemainingInBurst = burstCount;
 		projectilesRemainingInMag = projectilesPerMag;
 	}
 
-	void LateUpdate() {
+	void LateUpdate()
+    {
 		// animate recoil
 		transform.localPosition = Vector3.SmoothDamp (transform.localPosition, Vector3.zero, ref recoilSmoothDampVelocity, recoilMoveSettleTime);
 		recoilAngle = Mathf.SmoothDamp (recoilAngle, 0, ref recoilRotSmoothDampVelocity, recoilRotationSettleTime);
 		//transform.localEulerAngles = transform.localEulerAngles + Vector3.left * recoilAngle;
 
-		if (!isReloading && projectilesRemainingInMag == 0) {
+		if (!isReloading && projectilesRemainingInMag == 0)
+        {
 			Reload();
 		}
 	}
 
-	void Shoot() {
+	void Shoot()
+    {
 
-		if (!isReloading && Time.time > nextShotTime && projectilesRemainingInMag > 0) {
-			if (fireMode == FireMode.Burst) {
-				if (shotsRemainingInBurst == 0) {
+		if (!isReloading && Time.time > nextShotTime && projectilesRemainingInMag > 0)
+        {
+			if (fireMode == FireMode.Burst)
+            {
+				if (shotsRemainingInBurst == 0)
+                {
 					return;
 				}
 				shotsRemainingInBurst --;
 			}
-			else if (fireMode == FireMode.Single) {
-				if (!triggerReleasedSinceLastShot) {
+			else if (fireMode == FireMode.Single)
+            {
+				if (!triggerReleasedSinceLastShot)
+                {
 					return;
 				}
 			}
 
-			for (int i =0; i < projectileSpawn.Length; i ++) {
-				if (projectilesRemainingInMag == 0) {
+			for (int i =0; i < projectileSpawn.Length; i ++)
+            {
+				if (projectilesRemainingInMag == 0)
+                {
 					break;
 				}
+
 				projectilesRemainingInMag --;
 				nextShotTime = Time.time + msBetweenShots / 1000;
-				Projectile newProjectile = Instantiate (projectile, projectileSpawn[i].position, projectileSpawn[i].rotation) as Projectile;
-				newProjectile.SetSpeed (muzzleVelocity);
+
+                GameObject newProj = PoolManager.instance.ReuseObject(projectile.gameObject, projectileSpawn[i].position, projectileSpawn[i].rotation);
+                Projectile obj = newProj.GetComponent<Projectile>();
+                obj.SetSpeed(muzzleVelocity);
 			}
 
-			Instantiate(shell,shellEjection.position, shellEjection.rotation);
+            PoolManager.instance.ReuseObject(shell.gameObject, shellEjection.position, shellEjection.rotation);
 			muzzleflash.Activate();
 			transform.localPosition -= Vector3.forward * Random.Range(kickMinMax.x, kickMinMax.y);
 			recoilAngle += Random.Range(recoilAngleMinMax.x, recoilAngleMinMax.y);
@@ -90,14 +110,16 @@ public class Gun : MonoBehaviour {
 		}
 	}
 
-	public void Reload() {
-		if (!isReloading && projectilesRemainingInMag != projectilesPerMag) {
+	public void Reload()
+    {
+		if (!isReloading && projectilesRemainingInMag != projectilesPerMag)
+        {
 			StartCoroutine (AnimateReload ());
-
 		}
 	}
 
-	IEnumerator AnimateReload() {
+	IEnumerator AnimateReload()
+    {
 		isReloading = true;
 		yield return new WaitForSeconds (.2f);
 		AudioManager.instance.PlaySound (reloadAudio, transform.position);
@@ -107,7 +129,8 @@ public class Gun : MonoBehaviour {
 		Vector3 initialRot = transform.localEulerAngles;
 		float maxReloadAngle = 30;
 
-		while (percent < 1) {
+		while (percent < 1)
+        {
 			percent += Time.deltaTime * reloadSpeed;
 			float interpolation = (-Mathf.Pow(percent,2) + percent) * 4;
 			float reloadAngle = Mathf.Lerp(0, maxReloadAngle, interpolation);
@@ -121,18 +144,21 @@ public class Gun : MonoBehaviour {
 		projectilesRemainingInMag = projectilesPerMag;
 	}
 
-	public void Aim(Vector3 aimPoint) {
+	public void Aim(Vector3 aimPoint)
+    {
 		if (!isReloading) {
 			transform.LookAt (aimPoint);
 		}
 	}
 
-	public void OnTriggerHold() {
+	public void OnTriggerHold()
+    {
 		Shoot ();
 		triggerReleasedSinceLastShot = false;
 	}
 
-	public void OnTriggerRelease() {
+	public void OnTriggerRelease()
+    {
 		triggerReleasedSinceLastShot = true;
 		shotsRemainingInBurst = burstCount;
 	}

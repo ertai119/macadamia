@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Shell : MonoBehaviour {
+public class Shell : PoolObject {
 
 	public Rigidbody myRigidbody;
 	public float forceMin;
@@ -9,29 +9,44 @@ public class Shell : MonoBehaviour {
 
 	float lifetime = 4;
 	float fadetime = 2;
+    Color initColor;
+    Material mat;
 
-	void Start () {
+    void Awake()
+    {
+        mat = GetComponent<Renderer> ().material;
+        initColor = mat.color;
+    }
+
+	void Start ()
+    {
+        mat.color = initColor;
 		float force = Random.Range (forceMin, forceMax);
 		myRigidbody.AddForce (transform.right * force);
 		myRigidbody.AddTorque (Random.insideUnitSphere * force);
 
-		StartCoroutine (Fade ());
+		StartCoroutine ("Fade");
 	}
-	
-	IEnumerator Fade() {
+
+    public override void OnObjectReuse()
+    {
+        StopCoroutine("Fade");
+        Start();
+    }
+
+	IEnumerator Fade()
+    {
 		yield return new WaitForSeconds(lifetime);
 
 		float percent = 0;
 		float fadeSpeed = 1 / fadetime;
-		Material mat = GetComponent<Renderer> ().material;
-		Color initialColour = mat.color;
 
 		while (percent < 1) {
 			percent += Time.deltaTime * fadeSpeed;
-			mat.color = Color.Lerp(initialColour, Color.clear, percent);
+            mat.color = Color.Lerp(initColor, Color.clear, percent);
 			yield return null;
 		}
 
-		Destroy (gameObject);
+		Destroy ();
 	}
 }
