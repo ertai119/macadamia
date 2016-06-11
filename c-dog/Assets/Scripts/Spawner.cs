@@ -30,7 +30,8 @@ public class Spawner : MonoBehaviour {
 
 	public event System.Action<int> OnNewWave;
 
-	void Start() {
+	void Start()
+    {
 		playerEntity = FindObjectOfType<Player> ();
 		playerT = playerEntity.transform;
 
@@ -42,16 +43,20 @@ public class Spawner : MonoBehaviour {
 		NextWave ();
 	}
 
-	void Update() {
-		if (!isDisabled) {
-			if (Time.time > nextCampCheckTime) {
+	void Update()
+    {
+		if (!isDisabled)
+        {
+			if (Time.time > nextCampCheckTime)
+            {
 				nextCampCheckTime = Time.time + timeBetweenCampingChecks;
 
 				isCamping = (Vector3.Distance (playerT.position, campPositionOld) < campThresholdDistance);
 				campPositionOld = playerT.position;
 			}
 
-			if ((enemiesRemainingToSpawn > 0 || currentWave.infinite) && Time.time > nextSpawnTime) {
+			if ((enemiesRemainingToSpawn > 0 || currentWave.infinite) && Time.time > nextSpawnTime)
+            {
 				enemiesRemainingToSpawn--;
 				nextSpawnTime = Time.time + currentWave.timeBetweenSpawns;
 
@@ -59,10 +64,13 @@ public class Spawner : MonoBehaviour {
 			}
 		}
 
-		if (devMode) {
-			if (Input.GetKeyDown(KeyCode.Return)) {
+		if (devMode)
+        {
+			if (Input.GetKeyDown(KeyCode.Return))
+            {
 				StopCoroutine("SpawnEnemy");
-				foreach (Enemy enemy in FindObjectsOfType<Enemy>()) {
+				foreach (Enemy enemy in FindObjectsOfType<Enemy>())
+                {
 					GameObject.Destroy(enemy.gameObject);
 				}
 				NextWave();
@@ -70,21 +78,24 @@ public class Spawner : MonoBehaviour {
 		}
 	}
 
-	IEnumerator SpawnEnemy() {
+	IEnumerator SpawnEnemy()
+    {
 		float spawnDelay = 1;
 		float tileFlashSpeed = 4;
 
 		Transform spawnTile = map.GetRandomOpenTile ();
-		if (isCamping) {
+		if (isCamping)
+        {
 			spawnTile = map.GetTileFromPosition(playerT.position);
 		}
+
 		Material tileMat = spawnTile.GetComponent<Renderer> ().material;
 		Color initialColour = Color.white;
 		Color flashColour = Color.red;
 		float spawnTimer = 0;
 
-		while (spawnTimer < spawnDelay) {
-
+		while (spawnTimer < spawnDelay)
+        {
 			tileMat.color = Color.Lerp(initialColour,flashColour, Mathf.PingPong(spawnTimer * tileFlashSpeed, 1));
 
 			spawnTimer += Time.deltaTime;
@@ -96,11 +107,13 @@ public class Spawner : MonoBehaviour {
 		spawnedEnemy.SetCharacteristics (currentWave.moveSpeed, currentWave.hitsToKillPlayer, currentWave.enemyHealth, currentWave.skinColour);
 	}
 
-	void OnPlayerDeath() {
+	void OnPlayerDeath()
+    {
 		isDisabled = true;
 	}
 
-	void OnEnemyDeath() {
+	void OnEnemyDeath()
+    {
 		enemiesRemainingAlive --;
 
 		if (enemiesRemainingAlive == 0) {
@@ -108,25 +121,32 @@ public class Spawner : MonoBehaviour {
 		}
 	}
 
-	void ResetPlayerPosition() {
+	void ResetPlayerPosition() 
+    {
 		playerT.position = map.GetTileFromPosition (Vector3.zero).position + Vector3.up * 3;
 	}
 
-	void NextWave() {
-		if (currentWaveNumber > 0) {
+	void NextWave()
+    {
+		if (currentWaveNumber > 0)
+        {
 			AudioManager.instance.PlaySound2D ("Level Complete");
 		}
+
 		currentWaveNumber ++;
 
-		if (currentWaveNumber - 1 < waves.Length) {
+		if (currentWaveNumber - 1 < waves.Length)
+        {
 			currentWave = waves [currentWaveNumber - 1];
 
 			enemiesRemainingToSpawn = currentWave.enemyCount;
 			enemiesRemainingAlive = enemiesRemainingToSpawn;
 
-			if (OnNewWave != null) {
+			if (OnNewWave != null)
+            {
 				OnNewWave(currentWaveNumber);
 			}
+
 			ResetPlayerPosition();
 		}
 	}

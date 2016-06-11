@@ -66,7 +66,8 @@ public class Player : LivingEntity {
             });        
 	}
 
-	void Update () {
+	void Update ()
+    {
 		// Movement input
         Vector3 moveInput = new Vector3 (CnInputManager.GetAxisRaw ("Horizontal"), 0f, CnInputManager.GetAxisRaw ("Vertical"));
         Vector3 moveVelocity = moveInput.normalized * moveSpeed;
@@ -121,7 +122,8 @@ public class Player : LivingEntity {
 			gunController.Reload();
 		}
 
-		if (transform.position.y < -10) {
+		if (transform.position.y < -10)
+        {
 			TakeDamage (health);
 		}
 	}
@@ -131,5 +133,4 @@ public class Player : LivingEntity {
 		AudioManager.instance.PlaySound ("Player Death", transform.position);
 		base.Die ();
 	}
-		
 }

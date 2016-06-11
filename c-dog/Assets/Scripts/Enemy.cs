@@ -134,14 +134,18 @@ public class Enemy : LivingEntity {
 		pathfinder.enabled = true;
 	}
 
-	IEnumerator UpdatePath() {
+	IEnumerator UpdatePath()
+    {
 		float refreshRate = .25f;
 
-		while (hasTarget) {
-			if (currentState == State.Chasing) {
+		while (hasTarget)
+        {
+			if (currentState == State.Chasing)
+            {
 				Vector3 dirToTarget = (target.position - transform.position).normalized;
 				Vector3 targetPosition = target.position - dirToTarget * (myCollisionRadius + targetCollisionRadius + attackDistanceThreshold/2);
-				if (!dead) {
+				if (!dead)
+                {
 					pathfinder.SetDestination (targetPosition);
 				}
 			}
