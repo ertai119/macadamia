@@ -66,7 +66,7 @@ public class GameUI : MonoBehaviour {
 
         Analytics.CustomEvent("game over", new Dictionary<string, object>
             {
-                { "score", ScoreKeeper.score },
+                { "score", ScoreKeeper.score.ToString() },
                 { "wave number", newWaveTitle.text }
             });
         
