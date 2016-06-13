@@ -6,41 +6,35 @@ using CnControls;
 using UnityEngine.Analytics;
 
 [RequireComponent (typeof (PlayerController))]
-[RequireComponent (typeof (GunController))]
+[RequireComponent (typeof (WeaponController))]
 public class Player : LivingEntity {
 
-	public float moveSpeed = 5;
+    public float moveSpeed = 5;
 
-	public Crosshairs crosshairs;
+    public Crosshairs crosshairs;
 
     bool buttonDown = false;
-	PlayerController controller;
-	GunController gunController;
+    PlayerController controller;
+    WeaponController weaponController;
     Camera cam;
+    Enemy myTarget;
 
     public GameObject moveJoystick;
     public GameObject cameraJoystick;
     public GameObject shootButton;
 
-	protected override void Start ()
+
+    protected override void Start ()
     {
-		base.Start ();
+        base.Start ();
+    }
 
-        Analytics.Transaction("12345abcde", 0.99m, "USD", null, null);
-
-        Gender gender = Gender.Female;
-        Analytics.SetUserGender(gender);
-
-        int birthYear = 2014;
-        Analytics.SetUserBirthYear(birthYear);
-	}
-
-	void Awake()
+    void Awake()
     {
-		controller = GetComponent<PlayerController> ();
-		gunController = GetComponent<GunController> ();
-		
-		FindObjectOfType<Spawner> ().OnNewWave += OnNewWave;
+        controller = GetComponent<PlayerController> ();
+        weaponController = GetComponent<WeaponController> ();
+
+        FindObjectOfType<Spawner> ().OnNewWave += OnNewWave;
 
         if (Menu.instance.easyModeFlag)
         {
@@ -54,24 +48,73 @@ public class Player : LivingEntity {
         }
     }
 
-	void OnNewWave(int waveNumber)
+    void OnNewWave(int waveNumber)
     {
-		health = startingHealth;
-		gunController.EquipGun (waveNumber - 1);
+        health = startingHealth;
+        weaponController.EquipGun (waveNumber - 1);
 
-        Analytics.CustomEvent("on new wave", new Dictionary<string, object>
+        if (Menu.instance.easyModeFlag)
+        {
+            StartCoroutine(FindNearTarget());
+        }
+    }
+
+    IEnumerator FindNearTarget()
+    {
+        float refreshRate = .03f;
+
+        while (!dead)
+        {
+            Vector3 curPos = transform.position;
+            Enemy[] allEnemies = FindObjectsOfType<Enemy>();
+            float minDist = 255f;
+            int nextTargetIdx = -1;
+
+            for (int i = 0; i < allEnemies.Length; i++)
             {
-                { "health", health },
-                { "wave number", waveNumber }
-            });        
-	}
+                Enemy spawnedEnemy = allEnemies[i];
+                float dist = Vector3.Distance(curPos, spawnedEnemy.transform.position);
+                if (dist < minDist && dist < 10f)
+                {
+                    minDist = dist;
+                    nextTargetIdx = i;
+                }
+            }
 
-	void Update ()
+            if (nextTargetIdx != -1)
+            {
+                SetTarget(allEnemies[nextTargetIdx]);
+            }
+
+            yield return new WaitForSeconds(refreshRate);
+        }
+    }
+
+    void SetTarget(Enemy target)
     {
-		// Movement input
+        if (target == null)
+            return;
+
+        myTarget = target;
+        UpdateTargetMarker();
+    }
+
+    void UpdateTargetMarker()
+    {
+        if (myTarget == null)
+            return;
+
+        controller.LookAt(myTarget.transform.position);
+        weaponController.Aim(myTarget.transform.position);
+        crosshairs.transform.position = myTarget.transform.position;
+    }
+
+    void Update ()
+    {
+        // Movement input
         Vector3 moveInput = new Vector3 (CnInputManager.GetAxisRaw ("Horizontal"), 0f, CnInputManager.GetAxisRaw ("Vertical"));
         Vector3 moveVelocity = moveInput.normalized * moveSpeed;
-		controller.Move (moveVelocity);
+        controller.Move (moveVelocity);
 
         if (Menu.instance.easyModeFlag == false)
         {
@@ -81,56 +124,43 @@ public class Player : LivingEntity {
             if (camDir != Vector3.zero)
             {
                 buttonDown = true;
-
-                Vector3 lookPoint = cameraInput.normalized + controller.transform.position;
-                controller.LookAt(lookPoint);
-                //gunController.Aim(lookPoint);
-
-                //crosshairs.transform.position = lookPoint;
             }
             else
             {
                 buttonDown = false;
-            }    
+            }
         }
         else
         {
+            UpdateTargetMarker();
             buttonDown = CnInputManager.GetButton("Shoot");
-            if (moveInput.normalized != Vector3.zero)
-            {
-                Vector3 lookPoint = moveInput.normalized + controller.transform.position;
-                controller.LookAt(lookPoint);
-                //gunController.Aim(lookPoint);
+        }
 
-                //crosshairs.transform.position = lookPoint;
-            }
-        }       
-
-		// Weapon input
+        // Weapon input
         if (buttonDown == true)
         {
-			gunController.OnTriggerHold();
-		}
+            weaponController.OnTriggerHold();
+        }
 
         if (buttonDown == false)
         {
-			gunController.OnTriggerRelease();
-		}
+            weaponController.OnTriggerRelease();
+        }
 
-		if (Input.GetKeyDown (KeyCode.R))
+        if (Input.GetKeyDown (KeyCode.R))
         {
-			gunController.Reload();
-		}
+            weaponController.Reload();
+        }
 
-		if (transform.position.y < -10)
+        if (transform.position.y < -10)
         {
-			TakeDamage (health);
-		}
-	}
+            TakeDamage (health);
+        }
+    }
 
-	public override void Die ()
-	{
-		AudioManager.instance.PlaySound ("Player Death", transform.position);
-		base.Die ();
-	}
+    public override void Die ()
+    {
+        AudioManager.instance.PlaySound ("Player Death", transform.position);
+        base.Die ();
+    }
 }

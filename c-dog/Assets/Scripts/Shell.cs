@@ -3,12 +3,12 @@ using System.Collections;
 
 public class Shell : PoolObject {
 
-	public Rigidbody myRigidbody;
-	public float forceMin;
-	public float forceMax;
+    public Rigidbody myRigidbody;
+    public float forceMin;
+    public float forceMax;
 
-	float lifetime = 4;
-	float fadetime = 2;
+    float lifetime = 4;
+    float fadetime = 2;
     Color initColor;
     Material mat;
 
@@ -18,15 +18,15 @@ public class Shell : PoolObject {
         initColor = mat.color;
     }
 
-	void Start ()
+    void Start ()
     {
         mat.color = initColor;
-		float force = Random.Range (forceMin, forceMax);
-		myRigidbody.AddForce (transform.right * force);
-		myRigidbody.AddTorque (Random.insideUnitSphere * force);
+        float force = Random.Range (forceMin, forceMax);
+        myRigidbody.AddForce (transform.right * force);
+        myRigidbody.AddTorque (Random.insideUnitSphere * force);
 
-		StartCoroutine ("Fade");
-	}
+        StartCoroutine ("Fade");
+    }
 
     public override void OnObjectReuse()
     {
@@ -34,19 +34,19 @@ public class Shell : PoolObject {
         Start();
     }
 
-	IEnumerator Fade()
+    IEnumerator Fade()
     {
-		yield return new WaitForSeconds(lifetime);
+        yield return new WaitForSeconds(lifetime);
 
-		float percent = 0;
-		float fadeSpeed = 1 / fadetime;
+        float percent = 0;
+        float fadeSpeed = 1 / fadetime;
 
-		while (percent < 1) {
-			percent += Time.deltaTime * fadeSpeed;
+        while (percent < 1) {
+            percent += Time.deltaTime * fadeSpeed;
             mat.color = Color.Lerp(initColor, Color.clear, percent);
-			yield return null;
-		}
+            yield return null;
+        }
 
-		Destroy ();
-	}
+        Destroy ();
+    }
 }

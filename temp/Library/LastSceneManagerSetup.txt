@@ -1,0 +1,4 @@
+sceneSetups:
+- path: Assets/DungeonVoxels/Scenes/BaseVoxels.unity
+  isLoaded: 1
+  isActive: 1
