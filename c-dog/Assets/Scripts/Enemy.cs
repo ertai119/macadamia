@@ -7,6 +7,8 @@ public class Enemy : LivingEntity {
     protected enum State {Idle, Chasing, Attacking};
     State currentState;
 
+    WeaponController weaponController;
+
     public ParticleSystem deathEffect;
     public static event System.Action OnDeathStatic;
 
@@ -29,7 +31,8 @@ public class Enemy : LivingEntity {
 
     void Awake()
     {
-        pathfinder = GetComponent<NavMeshAgent> ();
+        weaponController = GetComponent<WeaponController>();
+        pathfinder = GetComponent<NavMeshAgent>();
 
         if (GameObject.FindGameObjectWithTag ("Player") != null)
         {
@@ -51,7 +54,7 @@ public class Enemy : LivingEntity {
         {
             currentState = State.Chasing;
             targetEntity.OnDeath += OnTargetDeath;
-
+            weaponController.EquipGun(0);
             StartCoroutine (UpdatePath ());
         }
     }
@@ -105,13 +108,20 @@ public class Enemy : LivingEntity {
                 {
                     nextAttackTime = Time.time + timeBetweenAttacks;
                     AudioManager.instance.PlaySound ("Enemy Attack", transform.position);
-                    StartCoroutine (Attack ());
+                    //StartCoroutine (AttackMelee());
                 }
+
+                AttackRange();
             }
         }
     }
 
-    IEnumerator Attack()
+    void AttackRange()
+    {
+        weaponController.OnTriggerHold();
+    }
+
+    IEnumerator AttackMelee()
     {
         currentState = State.Attacking;
         pathfinder.enabled = false;

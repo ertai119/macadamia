@@ -123,7 +123,6 @@ public class Spawner : MonoBehaviour {
         {
             NextWave();
         }
-
     }
 
     void ResetPlayerPosition() 

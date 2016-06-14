@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PoolObject : MonoBehaviour {
+public class PoolObject : MonoBehaviour
+{
 
     public virtual void OnObjectReuse()
     {

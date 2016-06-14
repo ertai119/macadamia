@@ -16,7 +16,6 @@ public class Player : LivingEntity {
     bool buttonDown = false;
     PlayerController controller;
     WeaponController weaponController;
-    Camera cam;
     Enemy myTarget;
 
     public GameObject moveJoystick;

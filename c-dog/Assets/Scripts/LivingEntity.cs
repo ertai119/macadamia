@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class LivingEntity : MonoBehaviour, IDamageable {
-
+public class LivingEntity : MonoBehaviour, IDamageable
+{
     public float startingHealth;
     public float health { get; protected set; }
     protected bool dead;
