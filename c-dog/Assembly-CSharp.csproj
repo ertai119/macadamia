@@ -45,8 +45,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\AI\AttackMeleeNode.cs" />
+     <Compile Include="Assets\Scripts\AI\AttackRangeNode.cs" />
      <Compile Include="Assets\Scripts\AI\BehaviorTree.cs" />
+     <Compile Include="Assets\Scripts\AI\MoveNode.cs" />
      <Compile Include="Assets\Scripts\AI\Node.cs" />
+     <Compile Include="Assets\Scripts\AI\SearchNode.cs" />
      <Compile Include="Assets\Scripts\AudioManager.cs" />
      <Compile Include="Assets\Scripts\Crosshairs.cs" />
      <Compile Include="Assets\Scripts\Enemy.cs" />
@@ -69,10 +73,6 @@
      <Compile Include="Assets\Scripts\Spawner.cs" />
      <Compile Include="Assets\Scripts\Utility.cs" />
      <Compile Include="Assets\Scripts\WeaponController.cs" />
-     <Compile Include="Assets\Temp\DungeonVoxels\Scripts\Knight.cs" />
-     <Compile Include="Assets\Temp\DungeonVoxels\Scripts\LightFlicker.cs" />
-     <Compile Include="Assets\Temp\DungeonVoxels\Scripts\SpikeTrap.cs" />
-     <Compile Include="Assets\Temp\DungeonVoxels\Scripts\TargetFollow.cs" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\_BloomAndFlares\BlendOneOne.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\NoiseEffectShaderRGB.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\_DepthOfField\SeparableWeightedBlurDof34.shader" />
