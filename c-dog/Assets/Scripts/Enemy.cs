@@ -27,7 +27,7 @@ public class Enemy : LivingEntity {
     float myCollisionRadius;
     float targetCollisionRadius;
 
-    BehaviorTree ai;
+    //BehaviorTree ai;
 
     bool hasTarget;
 
@@ -35,8 +35,8 @@ public class Enemy : LivingEntity {
     {
         weaponController = GetComponent<WeaponController>();
         pathfinder = GetComponent<NavMeshAgent>();
-        ai = GetComponent<BehaviorTree>();
-        ai.StartAI();
+        //ai = GetComponent<BehaviorTree>();
+        //ai.StartAI();
 
         if (GameObject.FindGameObjectWithTag ("Player") != null)
         {
@@ -122,7 +122,7 @@ public class Enemy : LivingEntity {
         if (Input.GetKeyDown(KeyCode.Return))
         {
             Debug.Log("stop ai");
-            ai.StopAI();
+            //ai.StopAI();
         }
     }
 

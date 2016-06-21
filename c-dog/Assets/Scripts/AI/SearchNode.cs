@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-class SearchNode : Node
+class SearchNode : TestNode
 {
     public override bool Invoke()
     {

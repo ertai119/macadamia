@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-class MoveNode : Node {
+class MoveNode : TestNode {
 
     public override bool Invoke()
     {
