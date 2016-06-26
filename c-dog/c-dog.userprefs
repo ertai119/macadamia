@@ -1,11 +1,17 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/AI/Node.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/AI/AIController.cs">
     <Files>
-      <File FileName="Assets/Editor/customInspector.cs" Line="29" Column="10" />
-      <File FileName="Assets/Scripts/AI/testClass.cs" Line="53" Column="1" />
-      <File FileName="Assets/Scripts/AI/Node.cs" Line="44" Column="1" />
+      <File FileName="Assets/Scripts/AI/AIController.cs" Line="22" Column="6" />
+      <File FileName="Assets/Scripts/AI/Node.cs" Line="8" Column="32" />
       <File FileName="Assets/Scripts/AI/AttackMeleeNode.cs" Line="4" Column="21" />
+      <File FileName="Assets/Scripts/AI/SearchNode.cs" Line="24" Column="22" />
+      <File FileName="Assets/Scripts/AI/MoveNode.cs" Line="15" Column="61" />
+      <File FileName="Assets/Scripts/AI/AttackRangeNode.cs" Line="4" Column="21" />
+      <File FileName="Assets/Scripts/Gun.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Enemy.cs" Line="46" Column="65" />
+      <File FileName="Assets/Standard Assets/CNControls/Scripts/Controllers/InputHelpers/JoystickInputHelper.cs" Line="81" Column="18" />
+      <File FileName="Assets/Scripts/Player.cs" Line="119" Column="10" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -14,12 +20,21 @@
             <Node name="Assembly-CSharp" expanded="True">
               <Node name="Scripts" expanded="True">
                 <Node name="AI" expanded="True">
-                  <Node name="Node.cs" selected="True" />
+                  <Node name="AIController.cs" selected="True" />
                 </Node>
               </Node>
             </Node>
-            <Node name="Assembly-CSharp-Editor" expanded="True">
-              <Node name="Editor" expanded="True" />
+            <Node name="Assembly-CSharp-Editor" expanded="True" />
+            <Node name="Assembly-CSharp-firstpass" expanded="True">
+              <Node name="Standard Assets" expanded="True">
+                <Node name="CNControls" expanded="True">
+                  <Node name="Scripts" expanded="True">
+                    <Node name="Controllers" expanded="True">
+                      <Node name="InputHelpers" expanded="True" />
+                    </Node>
+                  </Node>
+                </Node>
+              </Node>
             </Node>
           </Node>
         </State>

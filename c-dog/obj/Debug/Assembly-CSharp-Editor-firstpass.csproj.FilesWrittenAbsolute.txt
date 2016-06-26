@@ -33,3 +33,4 @@
 /Users/leeonehyo/Documents/macadamia/c-dog/Temp/bin/Debug/UnityEditor.iOS.Extensions.Common.dll
 /Users/leeonehyo/Documents/macadamia/c-dog/Temp/bin/Debug/UnityEditor.iOS.Extensions.Common.dll.mdb
 /Users/leeonehyo/Documents/macadamia/c-dog/Temp/bin/Debug/UnityEditor.iOS.Extensions.Xcode.dll.mdb
+/Users/leeonehyo/Documents/macadamia/c-dog/Temp/bin/Debug/UnityEditor.WebGL.Extensions.dll

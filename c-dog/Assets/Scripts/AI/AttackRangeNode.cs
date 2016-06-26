@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-class AttackRange : TestNode
+class AttackRange : Node
 {
     public override bool Invoke()
     {

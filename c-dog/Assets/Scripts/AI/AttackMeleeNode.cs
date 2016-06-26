@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-class AttackMelee : TestNode 
+class AttackMelee : Node 
 {
     public override bool Invoke()
     {
