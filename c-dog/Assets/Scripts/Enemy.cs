@@ -36,45 +36,30 @@ public class Enemy : LivingEntity {
         weaponController = GetComponent<WeaponController>();
         pathfinder = GetComponent<NavMeshAgent>();
         ai = GetComponent<AIController>();
+        ai.Activate();
+
+        if (GameObject.FindGameObjectWithTag ("Player") != null)
+        {
+            hasTarget = true;
+
+            target = GameObject.FindGameObjectWithTag ("Player").transform;
+            targetEntity = target.GetComponent<LivingEntity> ();
+
+            myCollisionRadius = GetComponent<CapsuleCollider> ().radius;
+            targetCollisionRadius = target.GetComponent<CapsuleCollider> ().radius;
+        }
     }
 
     protected override void Start ()
     {
         base.Start ();
 
-        ai.Activate();
-    }
-
-    public void SetTarget(GameObject targetObj)
-    {
-        if (target == null)
+        if (hasTarget)
         {
-            hasTarget = false;
-        }
-        else
-        {
-            hasTarget = true;
-
-            target = targetObj.transform;
-            targetEntity = target.GetComponent<LivingEntity>();
-
-            myCollisionRadius = GetComponent<CapsuleCollider>().radius;
-            targetCollisionRadius = target.GetComponent<CapsuleCollider>().radius;
-
             currentState = State.Chasing;
             targetEntity.OnDeath += OnTargetDeath;
             weaponController.EquipGun(0);
-            //StartCoroutine (UpdatePath ());
-        }
-    }
-
-    public void Move()
-    {
-        Vector3 dirToTarget = (target.position - transform.position).normalized;
-        Vector3 targetPosition = target.position - dirToTarget * (myCollisionRadius + targetCollisionRadius + attackDistanceThreshold/2);
-        if (!dead)
-        {
-            pathfinder.SetDestination (targetPosition);
+            StartCoroutine (UpdatePath ());
         }
     }
 
@@ -137,7 +122,7 @@ public class Enemy : LivingEntity {
         if (Input.GetKeyDown(KeyCode.Return))
         {
             Debug.Log("stop ai");
-            ai.Deactivate();
+            //ai.StopAI();
         }
     }
 
